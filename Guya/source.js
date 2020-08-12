@@ -2609,7 +2609,7 @@ class Guya extends paperback_extensions_common_1.Source {
         super(cheerio);
     }
     get version() {
-        return "1.0.1";
+        return "1.0.2";
     }
     get name() {
         return "Guya";

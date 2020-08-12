@@ -2672,7 +2672,7 @@ class Guya extends paperback_extensions_common_1.Source {
         let groupMap = result["groups"];
         let chapters = [];
         for (let chapter in rawChapters) {
-            let chapterMetadata = result[chapter];
+            let chapterMetadata = rawChapters[chapter];
             for (let group in chapterMetadata["groups"]) {
                 chapters.push(createChapter({
                     id: `${chapter}${SPLIT_VAR}${group}`,

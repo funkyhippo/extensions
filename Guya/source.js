@@ -2642,19 +2642,19 @@ class Guya extends paperback_extensions_common_1.Source {
         ];
     }
     getMangaDetails(data, metadata) {
-        let result = JSON.parse(data);
+        let result = typeof data === "string" ? JSON.parse(data) : data;
         let mangas = [];
         for (let series in result) {
-            let mangaDetails = result[series];
+            let seriesDetails = result[series];
             mangas.push(createManga({
-                id: mangaDetails["slug"],
+                id: seriesDetails["slug"],
                 titles: [series],
-                image: `${GUYA_API_BASE}/${mangaDetails["cover"]}`,
+                image: `${GUYA_API_BASE}/${seriesDetails["cover"]}`,
                 rating: 5,
-                status: 1,
-                artist: mangaDetails["artist"],
-                author: mangaDetails["author"],
-                desc: mangaDetails["description"],
+                status: paperback_extensions_common_1.MangaStatus.ONGOING,
+                artist: seriesDetails["artist"],
+                author: seriesDetails["author"],
+                desc: seriesDetails["description"],
             }));
         }
         return mangas;
@@ -2667,7 +2667,7 @@ class Guya extends paperback_extensions_common_1.Source {
         });
     }
     getChapters(data, metadata) {
-        let result = JSON.parse(data);
+        let result = typeof data === "string" ? JSON.parse(data) : data;
         let rawChapters = result["chapters"];
         let groupMap = result["groups"];
         let chapters = [];
@@ -2696,7 +2696,7 @@ class Guya extends paperback_extensions_common_1.Source {
         });
     }
     getChapterDetails(data, metadata) {
-        let result = JSON.parse(data);
+        let result = typeof data === "string" ? JSON.parse(data) : data;
         let rawChapters = result["chapters"];
         let [chapter, group] = metadata["chapId"].split(SPLIT_VAR);
         return createChapterDetails({
@@ -2708,22 +2708,49 @@ class Guya extends paperback_extensions_common_1.Source {
     }
     searchRequest(query, page) {
         return createRequestObject({
-            metadata: { "query": query.title },
+            metadata: { query: query.title },
             url: GUYA_ALL_SERIES_API,
             method: "GET",
         });
     }
     search(data, metadata) {
-        let result = JSON.parse(data);
+        let result = typeof data === "string" ? JSON.parse(data) : data;
         let query = metadata["query"].toLowerCase();
         let filteredResults = Object.keys(result).filter((e) => e.toLowerCase().includes(query));
-        return filteredResults.map((title) => {
-            let titleMetadata = result[title];
+        return filteredResults.map((series) => {
+            let seriesMetadata = result[series];
             return createMangaTile({
-                id: titleMetadata["slug"],
-                image: `${GUYA_API_BASE}/${titleMetadata["cover"]}`,
-                title: createIconText({ text: title }),
+                id: seriesMetadata["slug"],
+                image: `${GUYA_API_BASE}/${seriesMetadata["cover"]}`,
+                title: createIconText({ text: series }),
             });
+        });
+    }
+    getHomePageSectionRequest() {
+        return [
+            createHomeSectionRequest({
+                request: createRequestObject({
+                    url: GUYA_ALL_SERIES_API,
+                    method: "GET",
+                }),
+                sections: [createHomeSection({ id: "all_guya", title: "ALL GUYA" })],
+            }),
+        ];
+    }
+    getHomePageSections(data, sections) {
+        let result = typeof data === "string" ? JSON.parse(data) : data;
+        return sections.map((section) => {
+            let mangas = [];
+            for (let series in result) {
+                let seriesDetails = result[series];
+                mangas.push(createMangaTile({
+                    id: seriesDetails["slug"],
+                    image: `${GUYA_API_BASE}/${seriesDetails["cover"]}`,
+                    title: createIconText({ text: series }),
+                }));
+            }
+            section.items = mangas;
+            return section;
         });
     }
     getMangaShareUrl(mangaId) {

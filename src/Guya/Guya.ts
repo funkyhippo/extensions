@@ -10,6 +10,7 @@ import {
   Request,
   LanguageCode,
   MangaStatus,
+  MangaUpdates,
 } from "paperback-extensions-common";
 
 const GUYA_API_BASE = "https://guya.moe";
@@ -199,6 +200,39 @@ export class Guya extends Source {
       section.items = mangas;
       return section;
     });
+  }
+
+  filterUpdatedMangaRequest(
+    ids: string[],
+    time: Date,
+    page: number
+  ): Request | null {
+    let metadata = { ids: ids, referenceTime: time };
+
+    return createRequestObject({
+      metadata,
+      url: GUYA_ALL_SERIES_API,
+      method: "GET",
+    });
+  }
+
+  filterUpdatedManga(data: any, metadata: any): MangaUpdates {
+    let result = typeof data === "string" ? JSON.parse(data) : data;
+
+    let ids = [];
+    let moreResults = false;
+
+    for (let series in result) {
+      let seriesDetails = result[series];
+      let seriesUpdated = new Date(seriesDetails["last_updated"] * 1000);
+      if (
+        seriesUpdated >= metadata.referenceTime &&
+        metadata.ids.includes(series)
+      ) {
+        ids.push(series);
+      }
+    }
+    return createMangaUpdates({ ids, moreResults });
   }
 
   getMangaShareUrl(mangaId: string) {

@@ -2609,7 +2609,7 @@ class Guya extends paperback_extensions_common_1.Source {
         super(cheerio);
     }
     get version() {
-        return "1.0.5";
+        return "1.0.2";
     }
     get name() {
         return "Guya";
@@ -2707,30 +2707,6 @@ class Guya extends paperback_extensions_common_1.Source {
         });
     }
     searchRequest(query, page) {
-        console.log(MD_DOMAIN);
-        console.log(MD_RECENT_UPDATES);
-        console.log(MD_MANGA_API);
-        console.log(MD_CHAPTER_API);
-        console.log(MD_USER_FOLLOWS);
-        console.log(MD_USER_FOLLOWS_OLD);
-        console.log(MD_USER);
-        console.log(MD_HOMEPAGE_SETTINGS);
-        console.log(MD_LOGOUT);
-        console.log(MD_LIST_UPDATE);
-        console.log(MD_LIST_UNFOLLOW);
-        console.log(MD_CHAPTER_READ);
-        console.log(MD_CHAPTER_UNREAD);
-        console.log(MD_TITLES);
-        console.log(CACHE_DOMAIN);
-        console.log(CACHE_IMAGE_RESOLVER);
-        console.log(CACHE_SEARCH);
-        console.log(CACHE_MANGA);
-        console.log(CACHE_TAGS);
-        console.log(CACHE_PING);
-        console.log(CACHE_AUTH);
-        console.log(USER_AGENT);
-        console.log(APP_VERSION);
-        console.log(IS_PUBLIC);
         return createRequestObject({
             metadata: { query: query.title },
             url: GUYA_ALL_SERIES_API,

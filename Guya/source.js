@@ -2609,7 +2609,7 @@ class Guya extends paperback_extensions_common_1.Source {
         super(cheerio);
     }
     get version() {
-        return "1.0.2";
+        return "1.0.4";
     }
     get name() {
         return "Guya";
@@ -2707,6 +2707,9 @@ class Guya extends paperback_extensions_common_1.Source {
         });
     }
     searchRequest(query, page) {
+        console.log(globalThis);
+        console.log(CACHE_SEARCH);
+        console.log(CACHE_SEARCH);
         return createRequestObject({
             metadata: { query: query.title },
             url: GUYA_ALL_SERIES_API,

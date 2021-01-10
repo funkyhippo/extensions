@@ -431,7 +431,7 @@ class Guya extends paperback_extensions_common_1.Source {
                 method: "GET"
             });
             const data = yield this.requestManager.schedule(request, 1);
-            let result = typeof data === "string" ? JSON.parse(data) : data;
+            let result = typeof data === "string" ? JSON.parse(data.data) : data.data;
             let mangas = [];
             for (let series in result) {
                 let seriesDetails = result[series];
